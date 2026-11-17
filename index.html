@@ -65,7 +65,7 @@ header{position:relative}
   <a class="kachel" href="/ueber.html"><h2>Über mich</h2><p>Wer hinter RuToSo steckt und woran ich baue.</p><span>Mehr erfahren →</span></a>
   <a class="kachel" id="installieren" href="#" hidden data-ios="Auf dem iPhone oder iPad: unten auf „Teilen“ tippen und dann „Zum Home-Bildschirm“."><h2>Als App installieren</h2><p>rutoso.de mit einem Tipp auf den Startbildschirm legen, mit eigenem Symbol.</p><span>Jetzt installieren →</span></a>
 </main>
-<footer><span>© RuToSo</span><a href="mailto:info@rutoso.de">info@rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<footer><span>© RuToSo</span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 <script>
 (function(){
@@ -79,5 +79,6 @@ header{position:relative}
   addEventListener('appinstalled',function(){k.hidden=true});
 })();
 </script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
 </body>
 </html>

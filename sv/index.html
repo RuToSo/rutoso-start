@@ -65,7 +65,7 @@ header{position:relative}
   <a class="kachel" href="/sv/om.html"><h2>Om mig</h2><p>Vem som står bakom RuToSo och vad jag bygger.</p><span>Läs mer →</span></a>
   <a class="kachel" id="installieren" href="#" hidden data-ios="På iPhone eller iPad: tryck på ”Dela” och sedan ”Lägg till på hemskärmen”."><h2>Installera som app</h2><p>Lägg rutoso.de på hemskärmen med ett tryck, med en egen ikon.</p><span>Installera nu →</span></a>
 </main>
-<footer><span>© RuToSo</span><a href="mailto:info@rutoso.de">info@rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Dataskydd</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Villkor</a><span>(juridiska texter på tyska)</span></footer>
+<footer><span>© RuToSo</span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Dataskydd</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Villkor</a><span>(juridiska texter på tyska)</span></footer>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 <script>
 (function(){
@@ -79,5 +79,6 @@ header{position:relative}
   addEventListener('appinstalled',function(){k.hidden=true});
 })();
 </script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
 </body>
 </html>
