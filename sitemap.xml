@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://rutoso.de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/en/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/sv/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/neues.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/neues.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/news.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/nyheter.html"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/en/news.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/neues.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/news.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/nyheter.html"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/sv/nyheter.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/neues.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/news.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/nyheter.html"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/ueber.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/ueber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/about.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/om.html"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/en/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/ueber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/about.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/om.html"/>
+  </url>
+  <url>
+    <loc>https://rutoso.de/sv/om.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://rutoso.de/ueber.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://rutoso.de/en/about.html"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://rutoso.de/sv/om.html"/>
+  </url>
+</urlset>
