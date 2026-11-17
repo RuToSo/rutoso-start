@@ -39,9 +39,88 @@ footer a{color:inherit}
 <body>
 <header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Nicht gefunden</h1><p>Diese Seite gibt es leider nicht.</p></div></div></header>
 <div class="inhalt">
-  <p>Vielleicht hat sich die Adresse geändert. <a class="zurueck" href="/">Zur Startseite →</a></p>
+  <p>Vielleicht hat sich die Adresse geändert. <a href="/">Zur Startseite →</a></p>
   <p lang="en">This page doesn't exist. <a href="/en/">Go to the home page →</a></p>
   <p lang="sv">Den här sidan finns inte. <a href="/sv/">Till startsidan →</a></p>
+<section class="spiel" aria-labelledby="spiel-titel">
+  <h2 id="spiel-titel">Kleine Pause? Bau die Treppe.</h2>
+  <p class="spiel-text">Schieb die drei Kacheln so, dass sie die Treppe aus dem Logo ergeben. Tippe erst eine Kachel an, dann ein freies Feld.</p>
+  <div class="spiel-reihe">
+    <div class="brett" id="brett" role="grid" aria-label="Spielfeld, drei mal drei Felder"></div>
+    <div class="vorlage" aria-hidden="true">
+      <span>So soll es aussehen:</span>
+      <svg viewBox="0 0 3 3" width="72" height="72"><rect x="2.08" y=".08" width=".84" height=".84" rx=".2" fill="#fff" stroke="#DCE3EA" stroke-width=".06"/><rect x="1.08" y="1.08" width=".84" height=".84" rx=".2" fill="#F5C330"/><rect x=".08" y="2.08" width=".84" height=".84" rx=".2" fill="#F5C330"/></svg>
+    </div>
+  </div>
+  <p class="spiel-stand" id="stand" aria-live="polite">Züge: 0</p>
+  <div class="spiel-ende" id="ende" hidden>
+    <p><strong>Die Treppe steht!</strong> <span id="ende-zuege"></span></p>
+    <a class="spiel-knopf" href="/">Zur Startseite →</a>
+    <button type="button" class="spiel-knopf leise" id="nochmal">Nochmal</button>
+  </div>
+</section>
+<style>
+.spiel{margin-top:2.5rem;padding:1.3rem;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem}
+.spiel h2{margin:0 0 .3rem;font-size:1.15rem}
+.spiel-text{margin:0 0 1rem;color:var(--leise)}
+.spiel-reihe{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+.brett{display:grid;grid-template-columns:repeat(3,4.2rem);grid-template-rows:repeat(3,4.2rem);gap:.4rem;padding:.5rem;background:var(--blau);border-radius:1rem;border-bottom:5px solid var(--gelb)}
+.feld{all:unset;box-sizing:border-box;width:100%;height:100%;border-radius:.8rem;cursor:pointer;display:grid;place-items:center;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.18)}
+.feld:focus-visible{outline:3px solid var(--gelb);outline-offset:2px}
+.feld.kachel{border:0;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.feld.gelb{background:#F5C330}
+.feld.weiss{background:#fff}
+.feld.weiss svg{width:55%;height:55%}
+.feld.gewaehlt{outline:3px solid #fff;outline-offset:2px;transform:translateY(-3px)}
+.feld.ziel-frei:hover{background:rgba(255,255,255,.18)}
+.vorlage{display:flex;flex-direction:column;gap:.4rem;color:var(--leise);font-size:.85rem}
+.vorlage svg{background:var(--blau);border-radius:.6rem;padding:.3rem}
+.spiel-stand{margin:.9rem 0 0;color:var(--leise);font-size:.9rem}
+.spiel-ende[hidden]{display:none}
+.spiel-ende{margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center}
+.spiel-ende p{margin:0;flex-basis:100%}
+.spiel-knopf{display:inline-block;background:var(--blau);color:#fff;font:inherit;font-weight:600;text-decoration:none;border:0;border-radius:.6rem;padding:.55rem 1rem;cursor:pointer}
+.spiel-knopf.leise{background:none;color:var(--blau);padding-left:0}
+@media (prefers-color-scheme:dark){.spiel-knopf.leise{color:#7DB8E8}}
+@media (prefers-reduced-motion:no-preference){.feld{transition:transform .15s,background .15s}.brett.fertig .kachel{animation:hops .5s ease-out both}.brett.fertig .kachel:nth-child(5){animation-delay:.1s}.brett.fertig .kachel:nth-child(3){animation-delay:.2s}}
+@keyframes hops{40%{transform:translateY(-10px)}100%{transform:none}}
+</style>
+<script>
+(function(){
+  var brett=document.getElementById('brett'),stand=document.getElementById('stand'),ende=document.getElementById('ende');
+  var R='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3V21M8 3L16 7L8 11L16 21" fill="none" stroke="#1C5DA6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ZIEL={2:'weiss',4:'gelb',6:'gelb'};           // Feldnummer 0–8, zeilenweise
+  var lage,gewaehlt,zuege,fertig;
+  function mischen(){
+    do{var f=[0,1,2,3,4,5,6,7,8].sort(function(){return Math.random()-.5});lage={};lage[f[0]]='weiss';lage[f[1]]='gelb';lage[f[2]]='gelb'}while(geloest());
+    gewaehlt=null;zuege=0;fertig=false;ende.hidden=true;brett.classList.remove('fertig');zeichnen();
+  }
+  function geloest(){return Object.keys(ZIEL).every(function(k){return lage[k]===ZIEL[k]})}
+  function name(i){var z=['oben','Mitte','unten'][Math.floor(i/3)],s=['links','Mitte','rechts'][i%3];return z===s?'Mitte':z+' '+s}
+  function zeichnen(){
+    brett.innerHTML='';
+    for(var i=0;i<9;i++){
+      var b=document.createElement('button'),t=lage[i];b.type='button';b.className='feld';b.dataset.i=i;
+      if(t){b.classList.add('kachel',t);if(t==='weiss')b.innerHTML=R;b.setAttribute('aria-label',(t==='weiss'?'Weiße Kachel':'Gelbe Kachel')+', '+name(i)+(gewaehlt===i?', ausgewählt':''))}
+      else{b.setAttribute('aria-label','Freies Feld, '+name(i));if(gewaehlt!==null)b.classList.add('ziel-frei')}
+      if(gewaehlt===i)b.classList.add('gewaehlt');
+      b.disabled=fertig;brett.appendChild(b);
+    }
+    stand.textContent='Züge: '+zuege;
+  }
+  brett.addEventListener('click',function(e){
+    var b=e.target.closest('.feld');if(!b||fertig)return;var i=+b.dataset.i;
+    if(lage[i]){gewaehlt=(gewaehlt===i?null:i)}
+    else if(gewaehlt!==null){lage[i]=lage[gewaehlt];delete lage[gewaehlt];gewaehlt=null;zuege++;
+      if(geloest()){fertig=true;brett.classList.add('fertig');document.getElementById('ende-zuege').textContent='Geschafft in '+zuege+(zuege===1?' Zug.':' Zügen.');ende.hidden=false}}
+    zeichnen();
+    var neu=brett.children[i];if(neu&&!fertig)neu.focus();
+  });
+  document.getElementById('nochmal').addEventListener('click',mischen);
+  mischen();
+})();
+</script>
+
 </div>
 <footer><span>© RuToSo</span><a href="mailto:info@rutoso.de">info@rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
