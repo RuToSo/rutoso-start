@@ -1,2 +1,8 @@
-{"name":"RuToSo","short_name":"RuToSo","start_url":"/","display":"browser","background_color":"#F3F6F9","theme_color":"#1C5DA6",
- "icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"/icon-512.png","sizes":"512x512","type":"image/png"}]}
+{"id":"/","name":"RuToSo","short_name":"RuToSo","description":"Projekte und Apps aus eigener Werkstatt.","lang":"de",
+ "start_url":"/","scope":"/","display":"standalone","background_color":"#F3F6F9","theme_color":"#1C5DA6",
+ "icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+          {"src":"/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+          {"src":"/icon-maskable-192.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
+          {"src":"/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}],
+ "shortcuts":[{"name":"Neuigkeiten","url":"/neues.html","icons":[{"src":"/icon-192.png","sizes":"192x192"}]},
+              {"name":"Über mich","url":"/ueber.html","icons":[{"src":"/icon-192.png","sizes":"192x192"}]}]}

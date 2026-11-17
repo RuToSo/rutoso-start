@@ -22,6 +22,9 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#1C5DA6">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RuToSo">
 <style>
 :root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
 @media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
@@ -50,6 +53,7 @@ header{position:relative}
 .eintrag{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1rem 1.3rem;margin-top:1rem}
 .eintrag time{display:block;color:var(--leise);font-size:.9rem;margin-bottom:.2rem}
 .eintrag p{margin:0}
+.kachel[hidden],.kachel [hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -59,7 +63,21 @@ header{position:relative}
   <a class="kachel" href="https://siegen-green.rutoso.de"><h2>SiegenGreen</h2><p>Webbplats för ett skolprojekt från min utbildning i företagsekonomi på kvällstid: en fiktiv vertikal odling från Siegen-Wittgenstein (på tyska).</p><span>siegen-green.rutoso.de →</span></a>
   <a class="kachel" href="/sv/nyheter.html"><h2>Nyheter</h2><p>Vad som har hänt nyligen på rutoso.de och i mina projekt.</p><span>Läs nyheterna →</span></a>
   <a class="kachel" href="/sv/om.html"><h2>Om mig</h2><p>Vem som står bakom RuToSo och vad jag bygger.</p><span>Läs mer →</span></a>
+  <a class="kachel" id="installieren" href="#" hidden data-ios="På iPhone eller iPad: tryck på ”Dela” och sedan ”Lägg till på hemskärmen”."><h2>Installera som app</h2><p>Lägg rutoso.de på hemskärmen med ett tryck, med en egen ikon.</p><span>Installera nu →</span></a>
 </main>
 <footer><span>© RuToSo</span><a href="mailto:info@rutoso.de">info@rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Dataskydd</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Villkor</a><span>(juridiska texter på tyska)</span></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>
+(function(){
+  var k=document.getElementById('installieren');
+  if(!k||matchMedia('(display-mode: standalone)').matches||navigator.standalone)return;
+  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(ios){k.querySelector('p').textContent=k.dataset.ios;k.querySelector('span').hidden=true;k.removeAttribute('href');k.hidden=false;return}
+  var frage;
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();frage=e;k.hidden=false});
+  k.addEventListener('click',function(e){e.preventDefault();if(!frage)return;frage.prompt();frage.userChoice.then(function(){k.hidden=true;frage=null})});
+  addEventListener('appinstalled',function(){k.hidden=true});
+})();
+</script>
 </body>
 </html>
