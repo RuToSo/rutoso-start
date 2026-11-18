@@ -66,7 +66,7 @@ header{position:relative}
   <a class="kachel" href="/ueber.html"><h2>Über mich</h2><p>Wer hinter RuToSo steckt und woran ich baue.</p><span>Mehr erfahren →</span></a>
   <a class="kachel" id="installieren" href="#" hidden data-ios="Auf dem iPhone oder iPad: unten auf „Teilen“ tippen und dann „Zum Home-Bildschirm“."><h2>Als App installieren</h2><p>rutoso.de mit einem Tipp auf den Startbildschirm legen, mit eigenem Symbol.</p><span>Jetzt installieren →</span></a>
 </main>
-<footer><span>© 2026 RuToSo · Stand: 18.11.2026</span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-18"> · Stand: 18.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 <script>
 (function(){
@@ -81,5 +81,6 @@ header{position:relative}
 })();
 </script>
 <script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
 </body>
 </html>

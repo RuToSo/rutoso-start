@@ -87,8 +87,9 @@ header{position:relative}
   <h2>Kontakt</h2>
   <p>Enklast är ett mejl till <a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a>.</p>
 </div>
-<footer><span>© 2026 RuToSo · Uppdaterad: 18 nov 2026</span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Dataskydd</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Villkor</a><span>(juridiska texter på tyska)</span></footer>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-18"> · Uppdaterad: 18 nov 2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Dataskydd</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Villkor</a><span>(juridiska texter på tyska)</span></footer>
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 <script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
 </body>
 </html>
