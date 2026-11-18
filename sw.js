@@ -2,7 +2,7 @@
 // Holt Seiten immer frisch aus dem Netz und legt eine Kopie ab.
 // Ohne Netz wird die gespeicherte Kopie gezeigt.
 // Neue Seite dazugekommen? In DATEIEN eintragen und VERSION um eins erhöhen.
-const VERSION = 'rutoso-2';
+const VERSION = 'rutoso-3';
 const DATEIEN = ['/', '/neues.html', '/ueber.html', '/en/', '/en/news.html', '/en/about.html',
   '/sv/', '/sv/nyheter.html', '/sv/om.html', '/logo.svg', '/favicon.ico', '/icon-192.png'];
 
