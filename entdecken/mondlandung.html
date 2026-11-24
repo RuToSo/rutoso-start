@@ -65,6 +65,10 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
 .tasten .knopf.schub{flex:2}
 .tasten .knopf.an{background:var(--gelb);border-color:var(--gelb);color:#16222E}
 @media (pointer:coarse){.tasten{display:flex}}
+.arten{display:flex;gap:.4rem;margin-bottom:.6rem}
+.arten .knopf.leise{color:#C5D1DD;border-color:#3A4D60}
+.arten[hidden],.grenzen[hidden]{display:none}
+.ueber p.grenzen{font-size:.85rem;color:#9AABBD;margin-bottom:1rem!important}
 .steuerhilfe{margin-top:.8rem!important}
 </style>
 </head>
@@ -72,13 +76,19 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
 <header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Mondlandung</h1><p>Setz die Landefähre sanft auf – bevor der Treibstoff ausgeht.</p></div></div></header>
 <div class="inhalt">
   <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
-  <p>Die Mondfähre fällt mit echter Mondschwerkraft. Bremse mit dem Triebwerk, richte sie gerade aus und setze sanft auf einer der markierten Landeflächen auf. Kleine Flächen bringen mehr Punkte. Mit jeder geschafften Landung gibt es etwas weniger Treibstoff.</p>
+  <p>Die Mondfähre fällt mit Mondschwerkraft – auf „Normal“ in Echtzeit, auf „Leicht“ etwas langsamer, auf „Schwer“ schneller und mit strengeren Grenzen. Bremse mit dem Triebwerk, richte sie gerade aus und setze sanft auf einer der markierten Landeflächen auf. Kleine Flächen bringen mehr Punkte. Mit jeder geschafften Landung gibt es etwas weniger Treibstoff.</p>
   <div class="karte spielkarte">
     <div class="buehne">
       <canvas id="spiel" width="720" height="480" role="img" aria-label="Spielfeld mit Mondlandschaft und Landefähre"></canvas>
       <div class="ueber" id="ueber">
         <h2 id="u-titel">Mondlandung</h2>
-        <p id="u-text">Sanft landen: höchstens 2 m/s nach unten, 1 m/s zur Seite und fast gerade.</p>
+        <p id="u-text">Wähle eine Schwierigkeit und setz die Fähre sanft auf.</p>
+        <div class="arten" id="arten" role="radiogroup" aria-label="Schwierigkeit">
+          <button class="knopf leise" data-art="leicht" role="radio">Leicht</button>
+          <button class="knopf" data-art="normal" role="radio">Normal</button>
+          <button class="knopf leise" data-art="schwer" role="radio">Schwer</button>
+        </div>
+        <p class="grenzen" id="grenzen"></p>
         <button class="knopf" id="start">▶ Start</button>
       </div>
     </div>
@@ -87,7 +97,7 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
       <button class="knopf schub" data-taste="schub" aria-label="Triebwerk">▲ Schub</button>
       <button class="knopf leise" data-taste="rechts" aria-label="Nach rechts drehen">⟳</button>
     </div>
-    <p class="hinweis steuerhilfe">Tastatur: ↑ oder W = Schub, ← → oder A / D = drehen, P = Pause. Am Handy die Knöpfe unter dem Spielfeld. Der Rekord gilt nur, solange die Seite offen ist.</p>
+    <p class="hinweis steuerhilfe">Tastatur: ↑ oder W = Schub, ← → oder A / D = drehen, P = Pause. Alle Schwierigkeiten nutzen die Mondschwerkraft; sie unterscheiden sich in Spieltempo, Anfangsschwung, Treibstoff und erlaubter Landegeschwindigkeit. Am Handy die Knöpfe unter dem Spielfeld. Rekorde gibt es je Schwierigkeit; sie gelten nur, solange die Seite offen ist.</p>
   </div>
 </div>
 <footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
@@ -102,9 +112,20 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
   if('ontouchstart' in window||navigator.maxTouchPoints>0)document.getElementById('tasten').style.display='flex';
   var ueber=document.getElementById('ueber'),titel=document.getElementById('u-titel'),text=document.getElementById('u-text'),startK=document.getElementById('start');
   // 1 Pixel = 0,5 Meter
-  var M=0.5, G=1.62/M, SCHUB=G*2.6, DREH=2.2, TANK=1000, VERBRAUCH=55;
-  var MAX_V=2/M, MAX_H=1/M, MAX_W=10*Math.PI/180;
-  var f,boden,flaechen=[],funken=[],stufe,punkte,rekord=0,zustand='menue',pause=false,letzt=0,tasten={};
+  var M=0.5, G=1.62/M, SCHUB=G*2.6, DREH=2.2, VERBRAUCH=55;
+  // Schwierigkeiten: Spieltempo, erlaubte Landewerte (m/s, Grad), Anfangsschwung (px/s), Treibstoff, Punktefaktor
+  var ARTEN={
+    leicht:{name:'Leicht',tempo:.75,v:3,h:1.5,w:15,schwung:10,mehr:4,fall:0,tank:1400,weniger:80,min:600,faktor:1},
+    normal:{name:'Normal',tempo:1,v:2,h:1,w:10,schwung:30,mehr:8,fall:0,tank:1000,weniger:110,min:380,faktor:2},
+    schwer:{name:'Schwer',tempo:1.3,v:1.5,h:.7,w:7,schwung:50,mehr:12,fall:12,tank:850,weniger:120,min:300,faktor:3}
+  };
+  var art=ARTEN.normal,TANK,MAX_V,MAX_H,MAX_W;
+  function waehle(name){
+    art=ARTEN[name];TANK=art.tank;MAX_V=art.v/M;MAX_H=art.h/M;MAX_W=art.w*Math.PI/180;
+    document.querySelectorAll('[data-art]').forEach(function(k){var ja=k.dataset.art===name;k.classList.toggle('leise',!ja);k.setAttribute('aria-checked',ja)});
+    document.getElementById('grenzen').textContent='Landen mit höchstens '+zahl(art.v)+' m/s nach unten, '+zahl(art.h)+' m/s zur Seite und '+art.w+'° Neigung · Punkte ×'+art.faktor+(rekord[name]?' · Rekord: '+rekord[name]:'');
+  }
+  var f,boden,flaechen=[],funken=[],stufe,punkte,rekord={},zustand='menue',pause=false,letzt=0,tasten={};
 
   var sterne=[];for(var i=0;i<140;i++)sterne.push([Math.random()*B,Math.random()*H*.8,Math.random()*1.2+.3]);
 
@@ -141,7 +162,7 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
   }
   function neueStufe(){
     gelaende();
-    f={x:80+Math.random()*(B-160),y:110,vx:(Math.random()-.5)*(30+stufe*8),vy:0,w:0,tank:Math.max(380,TANK-(stufe-1)*110),an:false};
+    f={x:80+Math.random()*(B-160),y:110,vx:(Math.random()-.5)*(art.schwung+stufe*art.mehr),vy:art.fall,w:0,tank:Math.max(art.min,TANK-(stufe-1)*art.weniger),an:false};
     funken=[];zustand='flug';pause=false;ueber.hidden=true;
   }
   function boom(x,y,farbe,n,s){for(var i=0;i<n;i++){var w=Math.random()*7,v=Math.random()*(s||160);funken.push({x:x,y:y,vx:Math.cos(w)*v,vy:Math.sin(w)*v-40,t:.8+Math.random()*.7,f:farbe})}}
@@ -168,18 +189,21 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
     var sanft=Math.abs(f.vy)<=MAX_V&&Math.abs(f.vx)<=MAX_H&&Math.abs(f.w)<=MAX_W;
     if(platz&&sanft){
       f.y=platz.y-12;f.an=false;zustand='gelandet';
-      var gewinn=Math.round((50+f.tank/8)*platz.mal);punkte+=gewinn;
+      var gewinn=Math.round((50+f.tank/8)*platz.mal*art.faktor/2);punkte+=gewinn;
       boom(f.x,platz.y,'#F5C330',18,60);
-      melde('Gelandet!','+'+gewinn+' Punkte (×'+platz.mal+' Fläche) · Gesamt: '+punkte,'Nächste Landung ▶');
+      melde('Gelandet!','+'+gewinn+' Punkte (×'+platz.mal+' Fläche) · Gesamt: '+punkte,'Nächste Landung ▶',false);
     }else{
       zustand='kaputt';boom(f.x,f.y,'#F5C330',40);boom(f.x,f.y,'#B5B0A8',30);
       var grund=!platz?'Daneben – nur auf den markierten Flächen landen.':Math.abs(f.vy)>MAX_V?'Zu schnell nach unten ('+zahl(f.vy*M)+' m/s).':Math.abs(f.vx)>MAX_H?'Zu schnell zur Seite ('+zahl(Math.abs(f.vx)*M)+' m/s).':'Zu schief aufgesetzt.';
-      var neuR=punkte>rekord;if(neuR)rekord=punkte;
-      setTimeout(function(){melde(neuR&&punkte?'Neuer Rekord!':'Bruchlandung',grund+' '+(punkte?punkte+' Punkte in '+(stufe-1)+' Landung'+(stufe===2?'':'en')+'.':'')+(rekord&&!neuR?' Rekord: '+rekord:''),'↻ Neues Spiel')},700);
+      var alt=rekord[art.name.toLowerCase()]||0,neuR=punkte>alt;if(neuR)rekord[art.name.toLowerCase()]=punkte;
+      setTimeout(function(){
+        melde(neuR?'Neuer Rekord!':'Bruchlandung',grund+' '+(punkte?punkte+' Punkte in '+(stufe-1)+' Landung'+(stufe===2?'':'en')+'.':''),'↻ Neues Spiel',true);
+        waehle(art.name.toLowerCase());
+      },700);
     }
   }
   function zahl(x){return x.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})}
-  function melde(t,x,k){titel.textContent=t;text.textContent=x;startK.textContent=k;ueber.hidden=false}
+  function melde(t,x,k,wahl){titel.textContent=t;text.textContent=x;startK.textContent=k;document.getElementById('arten').hidden=!wahl;document.getElementById('grenzen').hidden=!wahl;ueber.hidden=false}
 
   function zeichneFaehre(){
     cx.save();cx.translate(f.x,f.y);cx.rotate(f.w);
@@ -213,6 +237,7 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
     var anteil=f.tank/TANK;cx.fillStyle='#263646';cx.fillRect(B-134,32,120,8);
     cx.fillStyle=anteil>.2?'#F5C330':'#E8875F';cx.fillRect(B-134,32,120*anteil,8);
     cx.fillStyle='#E8EEF4';cx.fillText('Landung '+stufe+' · '+punkte+' Punkte',B-14,62);
+    cx.fillStyle='#9AABBD';cx.font='13px system-ui,sans-serif';cx.fillText(art.name,B-14,80);
   }
   function zeichne(){
     cx.fillStyle='#05090F';cx.fillRect(0,0,B,H);
@@ -233,10 +258,12 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
   }
   function schleife(t){
     var dt=Math.min(.05,(t-letzt)/1000||0);letzt=t;
-    if(!pause)schritt(dt);
+    if(!pause)schritt(dt*art.tempo);
     zeichne();requestAnimationFrame(schleife);
   }
 
+  document.querySelectorAll('[data-art]').forEach(function(k){k.onclick=function(){waehle(k.dataset.art)}});
+  waehle('normal');
   startK.onclick=function(){
     if(pause){pause=false;ueber.hidden=true;return}
     if(zustand==='gelandet'){stufe++;neueStufe();return}
@@ -244,7 +271,7 @@ td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
   };
   function pausiere(an){
     if(zustand!=='flug')return;pause=an;
-    if(an)melde('Pause','Die Fähre wartet in der Luft.','▶ Weiter');else ueber.hidden=true;
+    if(an)melde('Pause','Die Fähre wartet in der Luft.','▶ Weiter',false);else ueber.hidden=true;
   }
   var belegung={ArrowUp:'schub',KeyW:'schub',Space:'schub',ArrowLeft:'links',KeyA:'links',ArrowRight:'rechts',KeyD:'rechts'};
   addEventListener('keydown',function(e){
