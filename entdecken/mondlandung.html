@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mondlandung · RuToSo</title>
+<meta name="description" content="Ein kleines Browserspiel: Lande die Mondfähre sanft auf einer Landefläche, bevor der Treibstoff ausgeht.">
+<link rel="canonical" href="https://rutoso.de/entdecken/mondlandung.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Mondlandung">
+<meta property="og:description" content="Ein kleines Browserspiel: Lande die Mondfähre sanft auf einer Landefläche, bevor der Treibstoff ausgeht.">
+<meta property="og:url" content="https://rutoso.de/entdecken/mondlandung.html">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+<style>
+.buehne{position:relative}
+#spiel{display:block;width:100%;height:auto;border-radius:.8rem;background:#05090F;touch-action:none}
+.ueber{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem;background:rgba(5,9,15,.72);border-radius:.8rem;color:#E8EEF4}
+.ueber[hidden]{display:none}
+.ueber h2{margin:0 0 .4rem!important;color:#F5C330}
+.ueber p{margin:0 0 1.2rem!important;color:#C5D1DD;max-width:26rem}
+.tasten{display:none;gap:.6rem;margin-top:.8rem}
+.tasten .knopf{flex:1;padding:1rem .5rem;font-size:1.2rem;touch-action:none;user-select:none;-webkit-user-select:none}
+.tasten .knopf.schub{flex:2}
+.tasten .knopf.an{background:var(--gelb);border-color:var(--gelb);color:#16222E}
+@media (pointer:coarse){.tasten{display:flex}}
+.steuerhilfe{margin-top:.8rem!important}
+</style>
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Mondlandung</h1><p>Setz die Landefähre sanft auf – bevor der Treibstoff ausgeht.</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
+  <p>Die Mondfähre fällt mit echter Mondschwerkraft. Bremse mit dem Triebwerk, richte sie gerade aus und setze sanft auf einer der markierten Landeflächen auf. Kleine Flächen bringen mehr Punkte. Mit jeder geschafften Landung gibt es etwas weniger Treibstoff.</p>
+  <div class="karte spielkarte">
+    <div class="buehne">
+      <canvas id="spiel" width="720" height="480" role="img" aria-label="Spielfeld mit Mondlandschaft und Landefähre"></canvas>
+      <div class="ueber" id="ueber">
+        <h2 id="u-titel">Mondlandung</h2>
+        <p id="u-text">Sanft landen: höchstens 2 m/s nach unten, 1 m/s zur Seite und fast gerade.</p>
+        <button class="knopf" id="start">▶ Start</button>
+      </div>
+    </div>
+    <div class="tasten" id="tasten">
+      <button class="knopf leise" data-taste="links" aria-label="Nach links drehen">⟲</button>
+      <button class="knopf schub" data-taste="schub" aria-label="Triebwerk">▲ Schub</button>
+      <button class="knopf leise" data-taste="rechts" aria-label="Nach rechts drehen">⟳</button>
+    </div>
+    <p class="hinweis steuerhilfe">Tastatur: ↑ oder W = Schub, ← → oder A / D = drehen, P = Pause. Am Handy die Knöpfe unter dem Spielfeld. Der Rekord gilt nur, solange die Seite offen ist.</p>
+  </div>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+<script>
+(function(){
+  var cv=document.getElementById('spiel');
+  if(cv.getBoundingClientRect().width<560){cv.width=400;cv.height=520}
+  var cx=cv.getContext('2d'),B=cv.width,H=cv.height;
+  if('ontouchstart' in window||navigator.maxTouchPoints>0)document.getElementById('tasten').style.display='flex';
+  var ueber=document.getElementById('ueber'),titel=document.getElementById('u-titel'),text=document.getElementById('u-text'),startK=document.getElementById('start');
+  // 1 Pixel = 0,5 Meter
+  var M=0.5, G=1.62/M, SCHUB=G*2.6, DREH=2.2, TANK=1000, VERBRAUCH=55;
+  var MAX_V=2/M, MAX_H=1/M, MAX_W=10*Math.PI/180;
+  var f,boden,flaechen=[],funken=[],stufe,punkte,rekord=0,zustand='menue',pause=false,letzt=0,tasten={};
+
+  var sterne=[];for(var i=0;i<140;i++)sterne.push([Math.random()*B,Math.random()*H*.8,Math.random()*1.2+.3]);
+
+  function gelaende(){
+    // Zickzack-Landschaft mit 2–3 flachen Landeflächen
+    var pkt=[],x=0,y=H-60-Math.random()*80;
+    var plaetze=[],anzahl=stufe<3?3:2,abschnitt=B/anzahl;
+    for(var i=0;i<anzahl;i++){
+      var klein=(i===anzahl-1)||Math.random()<.35,breite=klein?44:80;
+      var start=i*abschnitt+30+Math.random()*(abschnitt-breite-60);
+      plaetze.push({x1:start,x2:start+breite,mal:klein?5:2});
+    }
+    plaetze.sort(function(a,b){return a.x1-b.x1});
+    flaechen=[];pkt.push([0,y]);
+    while(x<B){
+      var p=plaetze.filter(function(q){return q.x1>=x})[0];
+      if(p&&p.x1-x<26){
+        x=p.x1;pkt.push([x,y]);x=p.x2;pkt.push([x,y]);
+        flaechen.push({x1:p.x1,x2:p.x2,y:y,mal:p.mal});plaetze.splice(plaetze.indexOf(p),1);
+      }else{
+        x+=14+Math.random()*22;if(p&&x>p.x1)x=p.x1;
+        y+= (Math.random()-.5)*70; y=Math.max(H*.45,Math.min(H-18,y));
+        pkt.push([Math.min(x,B),y]);
+      }
+    }
+    boden=pkt;
+  }
+  function hoehe(x){
+    for(var i=1;i<boden.length;i++){
+      var a=boden[i-1],b=boden[i];
+      if(x<=b[0]){var t=(x-a[0])/((b[0]-a[0])||1);return a[1]+(b[1]-a[1])*t}
+    }
+    return boden[boden.length-1][1];
+  }
+  function neueStufe(){
+    gelaende();
+    f={x:80+Math.random()*(B-160),y:110,vx:(Math.random()-.5)*(30+stufe*8),vy:0,w:0,tank:Math.max(380,TANK-(stufe-1)*110),an:false};
+    funken=[];zustand='flug';pause=false;ueber.hidden=true;
+  }
+  function boom(x,y,farbe,n,s){for(var i=0;i<n;i++){var w=Math.random()*7,v=Math.random()*(s||160);funken.push({x:x,y:y,vx:Math.cos(w)*v,vy:Math.sin(w)*v-40,t:.8+Math.random()*.7,f:farbe})}}
+
+  function schritt(dt){
+    funken.forEach(function(p){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=G*6*dt;p.t-=dt});
+    funken=funken.filter(function(p){return p.t>0});
+    if(zustand!=='flug')return;
+    if(tasten.links)f.w-=DREH*dt;
+    if(tasten.rechts)f.w+=DREH*dt;
+    f.w=Math.max(-Math.PI/2,Math.min(Math.PI/2,f.w));
+    f.an=tasten.schub&&f.tank>0;
+    var ax=0,ay=G;
+    if(f.an){ax+=Math.sin(f.w)*SCHUB;ay-=Math.cos(f.w)*SCHUB;f.tank=Math.max(0,f.tank-VERBRAUCH*dt)}
+    f.vx+=ax*dt;f.vy+=ay*dt;f.x+=f.vx*dt;f.y+=f.vy*dt;
+    if(f.x<12){f.x=12;f.vx=Math.abs(f.vx)*.3}if(f.x>B-12){f.x=B-12;f.vx=-Math.abs(f.vx)*.3}
+    if(f.y<-200)f.y=-200;
+    // Bodenkontakt: Füße und Rumpf prüfen
+    var c=Math.cos(f.w),s=Math.sin(f.w);
+    var teile=[[-11,12],[11,12],[0,-12],[-9,-4],[9,-4]].map(function(q){return [f.x+q[0]*c-q[1]*s,f.y+q[0]*s+q[1]*c]});
+    var beruehrt=teile.some(function(q){return q[1]>=hoehe(q[0])});
+    if(!beruehrt)return;
+    var platz=flaechen.filter(function(p){return teile[0][0]>=p.x1-2&&teile[1][0]<=p.x2+2})[0];
+    var sanft=Math.abs(f.vy)<=MAX_V&&Math.abs(f.vx)<=MAX_H&&Math.abs(f.w)<=MAX_W;
+    if(platz&&sanft){
+      f.y=platz.y-12;f.an=false;zustand='gelandet';
+      var gewinn=Math.round((50+f.tank/8)*platz.mal);punkte+=gewinn;
+      boom(f.x,platz.y,'#F5C330',18,60);
+      melde('Gelandet!','+'+gewinn+' Punkte (×'+platz.mal+' Fläche) · Gesamt: '+punkte,'Nächste Landung ▶');
+    }else{
+      zustand='kaputt';boom(f.x,f.y,'#F5C330',40);boom(f.x,f.y,'#B5B0A8',30);
+      var grund=!platz?'Daneben – nur auf den markierten Flächen landen.':Math.abs(f.vy)>MAX_V?'Zu schnell nach unten ('+zahl(f.vy*M)+' m/s).':Math.abs(f.vx)>MAX_H?'Zu schnell zur Seite ('+zahl(Math.abs(f.vx)*M)+' m/s).':'Zu schief aufgesetzt.';
+      var neuR=punkte>rekord;if(neuR)rekord=punkte;
+      setTimeout(function(){melde(neuR&&punkte?'Neuer Rekord!':'Bruchlandung',grund+' '+(punkte?punkte+' Punkte in '+(stufe-1)+' Landung'+(stufe===2?'':'en')+'.':'')+(rekord&&!neuR?' Rekord: '+rekord:''),'↻ Neues Spiel')},700);
+    }
+  }
+  function zahl(x){return x.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})}
+  function melde(t,x,k){titel.textContent=t;text.textContent=x;startK.textContent=k;ueber.hidden=false}
+
+  function zeichneFaehre(){
+    cx.save();cx.translate(f.x,f.y);cx.rotate(f.w);
+    if(f.an){
+      var l=14+Math.random()*12;
+      cx.fillStyle='rgba(245,195,48,.9)';cx.beginPath();cx.moveTo(-5,8);cx.lineTo(0,8+l);cx.lineTo(5,8);cx.fill();
+      cx.fillStyle='rgba(255,255,255,.8)';cx.beginPath();cx.moveTo(-2.5,8);cx.lineTo(0,8+l*.5);cx.lineTo(2.5,8);cx.fill();
+    }
+    cx.strokeStyle='#C5D1DD';cx.lineWidth=2;
+    cx.beginPath();cx.moveTo(-6,4);cx.lineTo(-11,12);cx.moveTo(6,4);cx.lineTo(11,12);cx.moveTo(-14,12);cx.lineTo(-8,12);cx.moveTo(8,12);cx.lineTo(14,12);cx.stroke();
+    cx.fillStyle='#D8B48A';cx.fillRect(-8,-2,16,8);
+    cx.fillStyle='#E8EEF4';cx.beginPath();cx.moveTo(-7,-2);cx.lineTo(-5,-12);cx.lineTo(5,-12);cx.lineTo(7,-2);cx.closePath();cx.fill();
+    cx.fillStyle='#1C5DA6';cx.fillRect(-2.5,-9,5,4);
+    cx.restore();
+  }
+  function anzeige(){
+    if(!f)return;
+    var unten=Math.max(0,(hoehe(f.x)-f.y-12)*M);
+    var werte=[
+      ['Höhe',Math.round(unten)+' m',true],
+      ['Sinken',zahl(f.vy*M)+' m/s',Math.abs(f.vy)<=MAX_V],
+      ['Seitlich',zahl(Math.abs(f.vx)*M)+' m/s',Math.abs(f.vx)<=MAX_H],
+      ['Neigung',Math.round(f.w*180/Math.PI)+'°',Math.abs(f.w)<=MAX_W]
+    ];
+    cx.font='600 14px system-ui,sans-serif';cx.textAlign='left';
+    werte.forEach(function(w,i){
+      cx.fillStyle='#9AABBD';cx.fillText(w[0],14,24+i*20);
+      cx.fillStyle=i&&!w[2]?'#E8875F':i?'#6FCF97':'#E8EEF4';cx.fillText(w[1],84,24+i*20);
+    });
+    cx.textAlign='right';cx.fillStyle='#9AABBD';cx.fillText('Treibstoff',B-14,24);
+    var anteil=f.tank/TANK;cx.fillStyle='#263646';cx.fillRect(B-134,32,120,8);
+    cx.fillStyle=anteil>.2?'#F5C330':'#E8875F';cx.fillRect(B-134,32,120*anteil,8);
+    cx.fillStyle='#E8EEF4';cx.fillText('Landung '+stufe+' · '+punkte+' Punkte',B-14,62);
+  }
+  function zeichne(){
+    cx.fillStyle='#05090F';cx.fillRect(0,0,B,H);
+    sterne.forEach(function(s){cx.fillStyle='rgba(255,255,255,'+(s[2]/2)+')';cx.fillRect(s[0],s[1],s[2],s[2])});
+    // Erde am Himmel
+    cx.fillStyle='#1E4E86';cx.beginPath();cx.arc(B-60,H*.3,18,0,7);cx.fill();
+    cx.fillStyle='rgba(76,155,232,.9)';cx.beginPath();cx.arc(B-60,H*.3,18,-Math.PI/2,Math.PI/2);cx.fill();
+    if(!boden)return;
+    cx.beginPath();cx.moveTo(0,H);boden.forEach(function(p){cx.lineTo(p[0],p[1])});cx.lineTo(B,H);cx.closePath();
+    cx.fillStyle='#3A4552';cx.fill();cx.strokeStyle='#9AABBD';cx.lineWidth=1.5;cx.stroke();
+    flaechen.forEach(function(p){
+      cx.strokeStyle='#F5C330';cx.lineWidth=3;cx.beginPath();cx.moveTo(p.x1,p.y);cx.lineTo(p.x2,p.y);cx.stroke();
+      cx.fillStyle='#F5C330';cx.font='600 13px system-ui,sans-serif';cx.textAlign='center';cx.fillText('×'+p.mal,(p.x1+p.x2)/2,p.y+18);
+    });
+    if(f&&zustand!=='kaputt')zeichneFaehre();
+    funken.forEach(function(p){cx.globalAlpha=Math.max(0,Math.min(1,p.t));cx.fillStyle=p.f;cx.fillRect(p.x,p.y,3,3)});cx.globalAlpha=1;
+    anzeige();
+  }
+  function schleife(t){
+    var dt=Math.min(.05,(t-letzt)/1000||0);letzt=t;
+    if(!pause)schritt(dt);
+    zeichne();requestAnimationFrame(schleife);
+  }
+
+  startK.onclick=function(){
+    if(pause){pause=false;ueber.hidden=true;return}
+    if(zustand==='gelandet'){stufe++;neueStufe();return}
+    stufe=1;punkte=0;neueStufe();
+  };
+  function pausiere(an){
+    if(zustand!=='flug')return;pause=an;
+    if(an)melde('Pause','Die Fähre wartet in der Luft.','▶ Weiter');else ueber.hidden=true;
+  }
+  var belegung={ArrowUp:'schub',KeyW:'schub',Space:'schub',ArrowLeft:'links',KeyA:'links',ArrowRight:'rechts',KeyD:'rechts'};
+  addEventListener('keydown',function(e){
+    if(e.code==='KeyP'||e.code==='Escape'){pausiere(!pause);return}
+    var b=belegung[e.code];if(!b)return;
+    if(zustand==='flug'){e.preventDefault();tasten[b]=true}
+  });
+  addEventListener('keyup',function(e){var b=belegung[e.code];if(b)tasten[b]=false});
+  document.querySelectorAll('[data-taste]').forEach(function(k){
+    var b=k.dataset.taste;
+    function an(e){e.preventDefault();tasten[b]=true;k.classList.add('an');if(e.pointerId!==undefined)k.setPointerCapture(e.pointerId)}
+    function aus(){tasten[b]=false;k.classList.remove('an')}
+    k.addEventListener('pointerdown',an);k.addEventListener('pointerup',aus);k.addEventListener('pointercancel',aus);
+    k.addEventListener('contextmenu',function(e){e.preventDefault()});
+  });
+  document.addEventListener('visibilitychange',function(){if(document.hidden){tasten={};pausiere(true)}});
+  requestAnimationFrame(schleife);
+})();
+</script>
+</body>
+</html>

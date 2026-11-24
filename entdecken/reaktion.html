@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Reaktionstest · RuToSo</title>
+<meta name="description" content="Teste deine Reaktionszeit: Sobald das Feld grün wird, so schnell wie möglich tippen. Fünf Runden, mit Auswertung.">
+<link rel="canonical" href="https://rutoso.de/entdecken/reaktion.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Reaktionstest">
+<meta property="og:description" content="Teste deine Reaktionszeit: Sobald das Feld grün wird, so schnell wie möglich tippen. Fünf Runden, mit Auswertung.">
+<meta property="og:url" content="https://rutoso.de/entdecken/reaktion.html">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+<style>
+.feld{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:clamp(16rem,45vh,24rem);margin-top:1rem;border:0;border-radius:1rem;color:#fff;font:inherit;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:background .08s}
+.feld:focus-visible{outline:3px solid var(--gelb);outline-offset:3px}
+.feld .gross{font-size:clamp(2rem,7vw,3.4rem);font-weight:700;font-variant-numeric:tabular-nums}
+.feld .klein{font-size:1.05rem;opacity:.9;margin-top:.3rem}
+.feld.start,.feld.ergebnis{background:var(--blau)}
+.feld.warten{background:#B23A3A}
+.feld.jetzt{background:#2E8B57;transition:none}
+.feld.frueh{background:#C98A12}
+.runden{display:flex;gap:.5rem;margin-top:.8rem}
+.runden span{flex:1;text-align:center;padding:.45rem .2rem;border-radius:.6rem;background:var(--flaeche);border:1px solid var(--linie);font-variant-numeric:tabular-nums;font-weight:600;color:var(--leise)}
+.runden span.voll{color:var(--text);border-color:var(--blau)}
+.ergebnis{display:flex;gap:2rem;flex-wrap:wrap}
+.ergebnis small{display:block;color:var(--leise)}
+.ergebnis b{font-size:1.6rem;font-variant-numeric:tabular-nums}
+.urteil{font-size:1.1rem;margin-top:1rem!important}
+.skala{position:relative;margin-top:1.2rem;padding-bottom:1.6rem}
+.band{height:.7rem;border-radius:99px;background:linear-gradient(90deg,#2E8B57,#4CA36B 30%,#F5C330 60%,#D9663F)}
+.marke{position:absolute;top:-.35rem;width:.3rem;height:1.4rem;background:var(--text);border-radius:2px;transform:translateX(-50%);transition:left .4s}
+.beschriftung{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;color:var(--leise);font-size:.8rem}
+</style>
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Reaktionstest</h1><p>Wie schnell bist du wirklich?</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
+  <p>Warte, bis das Feld <b>grün</b> wird, und tippe dann so schnell du kannst – mit Finger, Maus oder Leertaste. Nach fünf Runden bekommst du deine Auswertung.</p>
+  <button id="feld" class="feld start" type="button">
+    <span class="gross" id="f-gross">Los geht's</span>
+    <span class="klein" id="f-klein">Tippen zum Starten</span>
+  </button>
+  <div class="runden" id="runden" aria-label="Ergebnisse der Runden"></div>
+
+  <div class="karte" id="auswertung" hidden>
+    <div class="ergebnis">
+      <div><small>Durchschnitt</small><b id="schnitt">–</b></div>
+      <div><small>Beste Runde</small><b id="beste">–</b></div>
+      <div><small>Dein Rekord heute</small><b id="rekord">–</b></div>
+    </div>
+    <p class="urteil" id="urteil"></p>
+    <div class="skala" aria-hidden="true">
+      <div class="band"></div>
+      <div class="marke" id="marke"></div>
+      <div class="beschriftung"><span>150 ms</span><span>250 ms</span><span>350 ms</span><span>450 ms</span></div>
+    </div>
+    <div class="knopfreihe"><button class="knopf" id="nochmal">↻ Noch eine Runde</button></div>
+  </div>
+
+  <h2>Gut zu wissen</h2>
+  <p>Die meisten Menschen reagieren auf ein Lichtsignal in etwa 200 bis 300 Millisekunden. Müdigkeit, Ablenkung und Übung machen dabei einen spürbaren Unterschied. Auch dein Gerät spielt mit: Bildschirm, Maus und Browser brauchen selbst ein paar Millisekunden, deshalb sind die Werte am Handy oft etwas höher.</p>
+  <p class="hinweis">Gemessen wird nur in deinem Browser, nichts wird gespeichert oder übertragen. Der Rekord gilt, solange die Seite offen ist.</p>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+<script>
+(function(){
+  var RUNDEN=5,feld=document.getElementById('feld'),gross=document.getElementById('f-gross'),klein=document.getElementById('f-klein');
+  var rundenBox=document.getElementById('runden'),auswertung=document.getElementById('auswertung');
+  var zustand='start',zeiten=[],uhr=null,gruen=0,rekord=0;
+
+  for(var i=0;i<RUNDEN;i++){var s=document.createElement('span');s.textContent='–';rundenBox.appendChild(s)}
+  function zeigeRunden(){rundenBox.querySelectorAll('span').forEach(function(s,i){s.textContent=zeiten[i]?zeiten[i]+' ms':'–';s.classList.toggle('voll',!!zeiten[i])})}
+  function setze(z,g,k){zustand=z;feld.className='feld '+z;gross.textContent=g;klein.textContent=k}
+
+  function warte(){
+    setze('warten','Warte …','Erst tippen, wenn es grün wird');
+    uhr=setTimeout(function(){
+      setze('jetzt','JETZT!','');
+      gruen=performance.now();
+    },1500+Math.random()*3000);
+  }
+  function druck(zeitpunkt){
+    if(zustand==='start'||zustand==='ergebnis'||zustand==='frueh'){
+      if(zeiten.length>=RUNDEN){zeiten=[];zeigeRunden();auswertung.hidden=true}
+      warte();
+    }else if(zustand==='warten'){
+      clearTimeout(uhr);setze('frueh','Zu früh!','Tippen, um diese Runde zu wiederholen');
+    }else if(zustand==='jetzt'){
+      var ms=Math.max(1,Math.round(zeitpunkt-gruen));
+      zeiten.push(ms);zeigeRunden();
+      if(zeiten.length>=RUNDEN){setze('ergebnis',ms+' ms','Fertig! Deine Auswertung steht unten.');werte()}
+      else setze('ergebnis',ms+' ms','Runde '+zeiten.length+' von '+RUNDEN+' · Tippen für die nächste');
+    }
+  }
+  // Zeitstempel des Ereignisses nutzen – das ist genauer als der Moment, in dem der Code läuft
+  feld.addEventListener('pointerdown',function(e){e.preventDefault();druck(e.timeStamp||performance.now())});
+  addEventListener('keydown',function(e){
+    var ziel=document.activeElement;
+    if(e.repeat||!(e.code==='Space'||(e.code==='Enter'&&ziel===feld)))return;
+    if(ziel&&ziel!==feld&&ziel!==document.body)return;
+    e.preventDefault();druck(e.timeStamp||performance.now());
+  });
+
+  function werte(){
+    var schnitt=Math.round(zeiten.reduce(function(a,b){return a+b},0)/zeiten.length),beste=Math.min.apply(null,zeiten);
+    if(!rekord||schnitt<rekord)rekord=schnitt;
+    document.getElementById('schnitt').textContent=schnitt+' ms';
+    document.getElementById('beste').textContent=beste+' ms';
+    document.getElementById('rekord').textContent=rekord+' ms';
+    var u=schnitt<200?'Blitzschnell! Da kann kaum jemand mithalten.':schnitt<250?'Sehr gut – deutlich schneller als die meisten.':schnitt<300?'Gut! Genau im typischen Bereich.':schnitt<370?'Solide. Mit etwas Übung geht da noch was.':'Ganz entspannt. Vielleicht erst mal einen Kaffee?';
+    document.getElementById('urteil').textContent=u;
+    document.getElementById('marke').style.left=Math.max(0,Math.min(100,(schnitt-150)/300*100))+'%';
+    auswertung.hidden=false;
+  }
+  document.getElementById('nochmal').onclick=function(){zeiten=[];zeigeRunden();auswertung.hidden=true;feld.focus();warte()};
+})();
+</script>
+</body>
+</html>
