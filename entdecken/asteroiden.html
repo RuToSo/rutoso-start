@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Asteroidenfeld · RuToSo</title>
+<meta name="description" content="Ein kleines Browserspiel: Steuere dein Raumschiff durchs Asteroidenfeld, weich den Brocken aus und sammle Sterne.">
+<link rel="canonical" href="https://rutoso.de/entdecken/asteroiden.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Asteroidenfeld">
+<meta property="og:description" content="Ein kleines Browserspiel: Steuere dein Raumschiff durchs Asteroidenfeld, weich den Brocken aus und sammle Sterne.">
+<meta property="og:url" content="https://rutoso.de/entdecken/asteroiden.html">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+<style>
+.spielkarte{display:grid;grid-template-columns:minmax(0,24rem) 1fr;gap:1.5rem;align-items:start}
+.buehne{position:relative}
+#spiel{display:block;width:100%;height:auto;border-radius:.8rem;background:#05090F;touch-action:none;cursor:none}
+.ueber{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem;background:rgba(5,9,15,.72);border-radius:.8rem;color:#E8EEF4}
+.ueber[hidden]{display:none}
+.ueber h2{margin:0 0 .4rem!important;color:#F5C330}
+.ueber p{margin:0 0 1.2rem!important;color:#C5D1DD}
+.steuerung p{margin:0 0 .8rem}
+@media (max-width:40rem){.spielkarte{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Asteroidenfeld</h1><p>Ein kleines Spiel für zwischendurch.</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
+  <p>Steuere dein Raumschiff durchs Asteroidenfeld. Weich den Brocken aus und sammle die gelben Sterne ein. Je länger du durchhältst, desto dichter wird es.</p>
+  <div class="karte spielkarte">
+    <div class="buehne">
+      <canvas id="spiel" width="480" height="640" role="img" aria-label="Spielfeld"></canvas>
+      <div class="ueber" id="ueber">
+        <h2 id="u-titel">Asteroidenfeld</h2>
+        <p id="u-text">Drei Leben. Jeder Stern bringt 25 Punkte.</p>
+        <button class="knopf" id="start">▶ Spiel starten</button>
+      </div>
+    </div>
+    <div class="steuerung">
+      <p><b>Steuerung</b></p>
+      <p>Tastatur: ← → oder A / D<br>Handy: Finger auf dem Spielfeld hin und her ziehen<br>Maus: Raumschiff folgt dem Zeiger</p>
+      <p>P oder Esc: Pause</p>
+      <p class="hinweis">Der Rekord gilt nur, solange die Seite offen ist – gespeichert wird nichts.</p>
+    </div>
+  </div>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+<script>
+(function(){
+  var cv=document.getElementById('spiel'),cx=cv.getContext('2d'),B=cv.width,H=cv.height;
+  var ueber=document.getElementById('ueber'),titel=document.getElementById('u-titel'),text=document.getElementById('u-text'),startK=document.getElementById('start');
+  var schiff,brocken,sterne,funken,hinter,punkte,leben,zeit,schutz,rekord=0,laeuft=false,pause=false,letzt=0,tasten={},ziel=null,naechsterB,naechsterS;
+
+  hinter=[];for(var i=0;i<90;i++)hinter.push({x:Math.random()*B,y:Math.random()*H,v:20+Math.random()*80,r:Math.random()*1.3+.3});
+
+  function neu(){
+    schiff={x:B/2,y:H-70};brocken=[];sterne=[];funken=[];punkte=0;leben=3;zeit=0;schutz=1.5;naechsterB=.6;naechsterS=2;
+  }
+  function form(r){var p=[],n=8+Math.floor(Math.random()*4);for(var i=0;i<n;i++){var w=i/n*Math.PI*2,d=r*(.75+Math.random()*.35);p.push([Math.cos(w)*d,Math.sin(w)*d])}return p}
+  function neuerBrocken(){
+    var r=14+Math.random()*26;
+    brocken.push({x:r+Math.random()*(B-2*r),y:-r,r:r,v:110+Math.random()*90+zeit*4,dx:(Math.random()-.5)*50,w:0,dw:(Math.random()-.5)*2,p:form(r)});
+  }
+  function boom(x,y,farbe,n){for(var i=0;i<n;i++){var w=Math.random()*7,s=40+Math.random()*160;funken.push({x:x,y:y,vx:Math.cos(w)*s,vy:Math.sin(w)*s,t:.6+Math.random()*.4,f:farbe})}}
+
+  function schritt(dt){
+    zeit+=dt;punkte+=dt*10;if(schutz>0)schutz-=dt;
+    // Steuerung
+    var tempo=360;
+    if(tasten.ArrowLeft||tasten.KeyA)schiff.x-=tempo*dt;
+    if(tasten.ArrowRight||tasten.KeyD)schiff.x+=tempo*dt;
+    if(ziel!==null)schiff.x+=(ziel-schiff.x)*Math.min(1,dt*14);
+    schiff.x=Math.max(18,Math.min(B-18,schiff.x));
+    // Nachschub – wird mit der Zeit dichter
+    naechsterB-=dt;if(naechsterB<=0){neuerBrocken();naechsterB=Math.max(.16,.75-zeit*.012)*(.6+Math.random()*.8)}
+    naechsterS-=dt;if(naechsterS<=0){sterne.push({x:20+Math.random()*(B-40),y:-12,v:120,w:0});naechsterS=2+Math.random()*2.5}
+    brocken.forEach(function(b){b.y+=b.v*dt;b.x+=b.dx*dt;b.w+=b.dw*dt;if(b.x<b.r||b.x>B-b.r)b.dx*=-1});
+    sterne.forEach(function(s){s.y+=s.v*dt;s.w+=dt*3});
+    funken.forEach(function(f){f.x+=f.vx*dt;f.y+=f.vy*dt;f.t-=dt});
+    brocken=brocken.filter(function(b){return b.y<H+b.r});
+    funken=funken.filter(function(f){return f.t>0});
+    // Treffer
+    sterne=sterne.filter(function(s){
+      if(Math.hypot(s.x-schiff.x,s.y-schiff.y)<26){punkte+=25;boom(s.x,s.y,'#F5C330',14);return false}
+      return s.y<H+20;
+    });
+    if(schutz<=0)for(var i=0;i<brocken.length;i++){
+      var b=brocken[i];
+      if(Math.hypot(b.x-schiff.x,b.y-(schiff.y+4))<b.r*.85+12){
+        boom(b.x,b.y,'#B5B0A8',22);boom(schiff.x,schiff.y,'#4C9BE8',18);brocken.splice(i,1);leben--;schutz=1.6;
+        if(leben<=0)ende();break;
+      }
+    }
+  }
+
+  function zeichneSchiff(){
+    if(schutz>0&&Math.floor(schutz*10)%2)return;
+    var x=schiff.x,y=schiff.y;
+    cx.fillStyle='rgba(245,195,48,'+(.5+Math.random()*.4)+')';
+    cx.beginPath();cx.moveTo(x-6,y+14);cx.lineTo(x,y+24+Math.random()*8);cx.lineTo(x+6,y+14);cx.fill();
+    cx.fillStyle='#E8EEF4';cx.beginPath();cx.moveTo(x,y-18);cx.lineTo(x+14,y+14);cx.lineTo(x,y+8);cx.lineTo(x-14,y+14);cx.closePath();cx.fill();
+    cx.fillStyle='#1C5DA6';cx.beginPath();cx.arc(x,y-2,4.5,0,7);cx.fill();
+  }
+  function stern(x,y,r,w){
+    cx.save();cx.translate(x,y);cx.rotate(w);cx.beginPath();
+    for(var i=0;i<10;i++){var a=i*Math.PI/5-Math.PI/2,d=i%2?r*.45:r;cx.lineTo(Math.cos(a)*d,Math.sin(a)*d)}
+    cx.closePath();cx.fillStyle='#F5C330';cx.shadowColor='#F5C330';cx.shadowBlur=12;cx.fill();cx.restore();
+  }
+  function zeichne(dt){
+    cx.fillStyle='#05090F';cx.fillRect(0,0,B,H);
+    hinter.forEach(function(s){s.y+=s.v*dt*(laeuft&&!pause?1:.15);if(s.y>H){s.y=0;s.x=Math.random()*B}cx.fillStyle='rgba(255,255,255,'+(s.r/2)+')';cx.fillRect(s.x,s.y,s.r,s.r)});
+    if(!schiff)return;
+    sterne.forEach(function(s){stern(s.x,s.y,11,s.w)});
+    brocken.forEach(function(b){
+      cx.save();cx.translate(b.x,b.y);cx.rotate(b.w);cx.beginPath();
+      b.p.forEach(function(q,i){i?cx.lineTo(q[0],q[1]):cx.moveTo(q[0],q[1])});cx.closePath();
+      cx.fillStyle='#3A4552';cx.fill();cx.strokeStyle='#7F92A6';cx.lineWidth=1.5;cx.stroke();
+      cx.fillStyle='rgba(0,0,0,.25)';cx.beginPath();cx.arc(b.r*.25,-b.r*.2,b.r*.22,0,7);cx.fill();
+      cx.restore();
+    });
+    funken.forEach(function(f){cx.globalAlpha=Math.max(0,f.t);cx.fillStyle=f.f;cx.fillRect(f.x,f.y,3,3)});cx.globalAlpha=1;
+    if(leben>0)zeichneSchiff();
+    // Anzeige
+    cx.fillStyle='#E8EEF4';cx.font='600 20px system-ui,sans-serif';cx.textAlign='left';cx.fillText(Math.floor(punkte)+' Punkte',14,30);
+    cx.textAlign='right';cx.fillStyle='#4C9BE8';cx.fillText('♥'.repeat(Math.max(0,leben)),B-14,30);
+    if(rekord){cx.fillStyle='#9AABBD';cx.font='14px system-ui,sans-serif';cx.fillText('Rekord: '+rekord,B-14,52)}
+  }
+
+  function schleife(t){
+    var dt=Math.min(.05,(t-letzt)/1000||0);letzt=t;
+    if(laeuft&&!pause)schritt(dt);
+    zeichne(dt);
+    requestAnimationFrame(schleife);
+  }
+  function starte(){neu();laeuft=true;pause=false;ueber.hidden=true;cv.focus()}
+  function ende(){
+    laeuft=false;var p=Math.floor(punkte),neuR=p>rekord;if(neuR)rekord=p;
+    titel.textContent=neuR?'Neuer Rekord!':'Erwischt!';
+    text.textContent=p+' Punkte'+(neuR?'':' · Rekord: '+rekord);
+    startK.textContent='↻ Noch mal';ueber.hidden=false;
+  }
+  function pausiere(an){
+    if(!laeuft)return;pause=an;ueber.hidden=!an;
+    if(an){titel.textContent='Pause';text.textContent=Math.floor(punkte)+' Punkte bisher';startK.textContent='▶ Weiter'}
+  }
+  startK.onclick=function(){if(laeuft&&pause)pausiere(false);else starte()};
+
+  addEventListener('keydown',function(e){
+    if(['ArrowLeft','ArrowRight'].indexOf(e.code)>=0&&laeuft)e.preventDefault();
+    if(e.code==='KeyP'||e.code==='Escape'){pausiere(!pause);return}
+    tasten[e.code]=true;ziel=null;
+  });
+  addEventListener('keyup',function(e){tasten[e.code]=false});
+  function zeiger(e){var r=cv.getBoundingClientRect();ziel=(e.clientX-r.left)/r.width*B}
+  cv.addEventListener('pointermove',zeiger);
+  cv.addEventListener('pointerdown',function(e){zeiger(e);cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')ziel=null});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)pausiere(true)});
+
+  requestAnimationFrame(schleife);
+})();
+</script>
+</body>
+</html>

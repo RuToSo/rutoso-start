@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Passwort-Generator · RuToSo</title>
+<meta name="description" content="Sichere Passwörter und merkbare Passsätze erzeugen – direkt im Browser, ohne dass etwas übertragen wird.">
+<link rel="canonical" href="https://rutoso.de/entdecken/passwort.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Passwort-Generator">
+<meta property="og:description" content="Sichere Passwörter und merkbare Passsätze erzeugen – direkt im Browser, ohne dass etwas übertragen wird.">
+<meta property="og:url" content="https://rutoso.de/entdecken/passwort.html">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+<style>
+.modus{display:flex;gap:.4rem;margin-bottom:1rem}
+.ausgabe{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.ausgabe .knopfreihe{margin:0}
+#pw{flex:1 1 18rem;min-height:1.6em;font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:1.25rem;padding:.8rem 1rem;background:var(--grund);border:1px solid var(--linie);border-radius:.6rem;word-break:break-all;user-select:all}
+.staerke{height:.5rem;background:var(--linie);border-radius:99px;margin-top:1rem;overflow:hidden}
+#balken{height:100%;width:0;border-radius:99px;transition:width .25s,background .25s}
+.regler{display:flex;align-items:center;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap}
+.regler input{flex:1 1 12rem;accent-color:var(--blau)}
+.haken{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;margin-top:.8rem}
+.haken input{accent-color:var(--blau)}
+.haken select{font:inherit;padding:.25rem .4rem;border:1px solid var(--linie);border-radius:.4rem;background:var(--grund);color:var(--text)}
+.tipp{margin-top:0}
+.tipp p{color:var(--leise);margin:.3rem 0 0!important}
+</style>
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Passwort-Generator</h1><p>Sichere Passwörter, erzeugt nur auf deinem Gerät.</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
+  <p>Ein gutes Passwort ist lang und zufällig. Dieser Generator nutzt den Zufallsgenerator deines Browsers, der auch für Verschlüsselung gedacht ist. Das Passwort entsteht nur auf deinem Gerät, es wird nichts gespeichert und nichts übertragen.</p>
+
+  <div class="karte">
+    <div class="modus" role="tablist">
+      <button class="knopf" id="m-zeichen" role="tab" aria-selected="true">Passwort</button>
+      <button class="knopf leise" id="m-woerter" role="tab" aria-selected="false">Passsatz</button>
+    </div>
+    <div class="ausgabe">
+      <output id="pw" aria-live="polite"></output>
+      <div class="knopfreihe">
+        <button class="knopf" id="neu">↻ Neu</button>
+        <button class="knopf leise" id="kopieren">Kopieren</button>
+      </div>
+    </div>
+    <div class="staerke"><div id="balken"></div></div>
+    <p class="hinweis" id="bewertung"></p>
+
+    <div id="opt-zeichen">
+      <label class="regler">Länge: <b id="laenge-wert">20</b><input type="range" id="laenge" min="8" max="64" value="20"></label>
+      <div class="haken">
+        <label><input type="checkbox" id="gross" checked> Großbuchstaben</label>
+        <label><input type="checkbox" id="klein" checked> Kleinbuchstaben</label>
+        <label><input type="checkbox" id="ziffern" checked> Ziffern</label>
+        <label><input type="checkbox" id="sonder" checked> Sonderzeichen</label>
+        <label><input type="checkbox" id="eindeutig" checked> Verwechselbare weglassen (I, l, 1, O, 0)</label>
+      </div>
+    </div>
+    <div id="opt-woerter" hidden>
+      <label class="regler">Wörter: <b id="anzahl-wert">6</b><input type="range" id="anzahl" min="4" max="10" value="6"></label>
+      <div class="haken">
+        <label>Trennzeichen <select id="trenner"><option value="-">Bindestrich</option><option value=".">Punkt</option><option value=" ">Leerzeichen</option><option value="_">Unterstrich</option></select></label>
+        <label><input type="checkbox" id="zahl-dazu" checked> Eine Zahl anhängen</label>
+      </div>
+    </div>
+  </div>
+
+  <h2>Worauf es ankommt</h2>
+  <div class="liste">
+    <div class="karte tipp"><b>Länge schlägt Komplexität.</b><p>Jedes zusätzliche Zeichen macht ein Passwort um ein Vielfaches schwerer zu erraten. 16 Zeichen und mehr sind eine gute Wahl.</p></div>
+    <div class="karte tipp"><b>Für jedes Konto ein eigenes.</b><p>Wird ein Dienst gehackt, sind sonst gleich alle Konten offen. Ein Passwort-Manager merkt sich die vielen Passwörter für dich.</p></div>
+    <div class="karte tipp"><b>Passsätze zum Merken.</b><p>Für Passwörter, die du tippen musst – etwa für den Passwort-Manager selbst – sind mehrere zufällige Wörter leichter zu merken und trotzdem stark.</p></div>
+  </div>
+  <p class="hinweis">Die Schätzung der Knackzeit geht von einem Angreifer aus, der zehn Milliarden Versuche pro Sekunde schafft. Sie ist eine grobe Orientierung, keine Garantie.</p>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+<script>
+(function(){
+  var WOERTER=Array.from(new Set('Abend Adler Ahorn Akte Alpen Ampel Anker Apfel Arena Asche Atlas Auge Ausweg Bach Backe Bagger Bahn Balkon Ball Banane Bank Bauer Baum Becher Beere Berg Besen Biene Birne Blatt Blitz Blume Boden Bogen Boot Brett Brief Brille Brot Brunnen Buch Burg Butter Dach Dackel Damm Daumen Decke Delfin Deich Dose Drache Dschungel Duft Dusche Ecke Eiche Eimer Eis Elch Ende Engel Ente Erbse Erde Esel Eule Fabrik Faden Fahne Falke Farbe Feder Feld Fenster Ferien Fest Feuer Fisch Flagge Flasche Floss Fluss Flut Fohlen Forst Frosch Fuchs Funke Gabel Garten Gast Geige Geld Gipfel Glas Glocke Gold Gras Gurke Hafen Hagel Hammer Hand Harfe Hase Haus Hecke Heft Held Helm Hemd Herbst Herz Himmel Hirsch Hof Honig Horn Hose Hotel Hund Hut Igel Insel Jacke Jahr Joghurt Kaffee Kamel Kamm Kanal Kanne Kante Karte Kasse Katze Kegel Keller Kerze Kessel Kette Kiesel Kino Kirche Kissen Kiste Klee Knopf Koch Koffer Komet Korb Kran Kranich Krone Kuchen Kugel Lager Lampe Land Laterne Laub Leiter Licht Lineal Linse Loch Locke Luchs Luft Lupe Magnet Mantel Markt Maus Meer Mehl Messer Milch Minze Mond Moor Motor Mantel Mulde Muschel Nadel Nebel Nest Netz Nudel Ofen Ohr Onkel Orgel Otter Paket Palme Papier Pfanne Pfeffer Pferd Pflaume Pilz Pinsel Planet Platz Pony Post Puppe Quelle Rabe Radio Rakete Rasen Raupe Regen Reh Reifen Riese Ring Rock Rose Rucksack Ruder Sack Salat Salz Sand Sattel Schaf Schal Schiff Schloss Schnee Schrank Schuh Seife Seil Sessel Sofa Sonne Spiegel Stern Stiefel Stift Stuhl Sturm Suppe Tafel Tanne Tasche Tasse Teich Teller Tiger Tisch Tomate Tor Traum Treppe Tulpe Turm Uhr Ufer Ulme Vase Vogel Vulkan Waage Wagen Wald Wal Wand Wasser Watte Welle Wiese Wind Winter Wolke Wolle Wurm Wurzel Zange Zebra Zelt Zimmer Zitrone Zucker Zug Zwerg Zwiebel'.split(' ')));
+  var $=function(id){return document.getElementById(id)};
+  // gleichverteilte Zufallszahl 0..n-1 (ohne Modulo-Verzerrung)
+  function zufall(n){
+    var grenze=Math.floor(4294967296/n)*n,b=new Uint32Array(1);
+    do{crypto.getRandomValues(b)}while(b[0]>=grenze);
+    return b[0]%n;
+  }
+  var modus='zeichen',bits=0;
+  function zeichenPw(){
+    var gr='ABCDEFGHIJKLMNOPQRSTUVWXYZ',kl='abcdefghijklmnopqrstuvwxyz',zi='0123456789',so='!#$%&*+-=?@_~.:;';
+    if($('eindeutig').checked){gr=gr.replace(/[IO]/g,'');kl=kl.replace(/l/g,'');zi=zi.replace(/[01]/g,'')}
+    var gruppen=[];
+    if($('gross').checked)gruppen.push(gr);if($('klein').checked)gruppen.push(kl);
+    if($('ziffern').checked)gruppen.push(zi);if($('sonder').checked)gruppen.push(so);
+    if(!gruppen.length){$('klein').checked=true;gruppen.push(kl)}
+    var alle=gruppen.join(''),n=+$('laenge').value,pw;
+    // so lange würfeln, bis jede gewählte Gruppe vorkommt
+    do{pw='';for(var i=0;i<n;i++)pw+=alle[zufall(alle.length)]}
+    while(n>=gruppen.length&&!gruppen.every(function(g){return [].some.call(pw,function(c){return g.indexOf(c)>=0})}));
+    bits=n*Math.log2(alle.length);
+    return pw;
+  }
+  function wortPw(){
+    var n=+$('anzahl').value,t=$('trenner').value,w=[];
+    for(var i=0;i<n;i++)w.push(WOERTER[zufall(WOERTER.length)]);
+    bits=n*Math.log2(WOERTER.length);
+    if($('zahl-dazu').checked){w.push(String(zufall(100)));bits+=Math.log2(100)}
+    return w.join(t);
+  }
+  function knackzeit(b){
+    var s=Math.pow(2,b-1)/1e10,j=s/31557600;
+    if(s<1)return 'sofort';if(s<3600)return 'unter einer Stunde';if(s<86400)return 'wenige Stunden';
+    if(j<1)return 'einige Tage bis Monate';if(j<1000)return 'rund '+Math.round(j).toLocaleString('de-DE')+' Jahre';
+    if(j<1e6)return 'Tausende Jahre';if(j<1e9)return 'Millionen Jahre';if(j<1e12)return 'Milliarden Jahre';
+    return 'länger, als das Universum alt ist';
+  }
+  function erzeuge(){
+    $('pw').textContent=modus==='zeichen'?zeichenPw():wortPw();
+    var stufe=bits<50?['Schwach','#D9663F',25]:bits<70?['Ordentlich','#F5C330',55]:bits<90?['Stark','#4CA36B',80]:['Sehr stark','#2E8B57',100];
+    $('balken').style.width=stufe[2]+'%';$('balken').style.background=stufe[1];
+    $('bewertung').textContent=stufe[0]+' · etwa '+Math.round(bits)+' Bit Zufall · Knackzeit: '+knackzeit(bits);
+    $('kopieren').textContent='Kopieren';
+  }
+  function setzeModus(m){
+    modus=m;
+    $('m-zeichen').classList.toggle('leise',m!=='zeichen');$('m-woerter').classList.toggle('leise',m!=='woerter');
+    $('m-zeichen').setAttribute('aria-selected',m==='zeichen');$('m-woerter').setAttribute('aria-selected',m==='woerter');
+    $('opt-zeichen').hidden=m!=='zeichen';$('opt-woerter').hidden=m!=='woerter';
+    erzeuge();
+  }
+  $('m-zeichen').onclick=function(){setzeModus('zeichen')};
+  $('m-woerter').onclick=function(){setzeModus('woerter')};
+  $('neu').onclick=erzeuge;
+  $('laenge').oninput=function(){$('laenge-wert').textContent=this.value;erzeuge()};
+  $('anzahl').oninput=function(){$('anzahl-wert').textContent=this.value;erzeuge()};
+  document.querySelectorAll('#opt-zeichen input[type=checkbox],#opt-woerter input,#trenner').forEach(function(e){e.onchange=erzeuge});
+  $('kopieren').onclick=function(){
+    var t=$('pw').textContent,k=this;
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){k.textContent='✓ Kopiert'},function(){k.textContent='Bitte markieren'});
+    else k.textContent='Bitte markieren';
+  };
+  erzeuge();
+})();
+</script>
+</body>
+</html>

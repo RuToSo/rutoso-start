@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Entdecken · RuToSo</title>
+<meta name="description" content="Planeten live, Mondphasen, eine Reise mit Lichtgeschwindigkeit, ein Passwort-Generator und ein kleines Spiel – alles direkt im Browser.">
+<link rel="canonical" href="https://rutoso.de/entdecken/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Entdecken">
+<meta property="og:description" content="Planeten live, Mondphasen, eine Reise mit Lichtgeschwindigkeit, ein Passwort-Generator und ein kleines Spiel – alles direkt im Browser.">
+<meta property="og:url" content="https://rutoso.de/entdecken/">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Entdecken</h1><p>Kleine Projekte zum Ausprobieren, direkt im Browser.</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/">← Zur Startseite</a>
+  <p>Hier sammle ich kleine Seiten, die einfach Spaß machen oder nützlich sind. Alles läuft direkt in deinem Browser: keine Anmeldung, keine Cookies, kein Tracking, und es werden keine Daten an mich oder andere geschickt.</p>
+  <div class="liste">
+    <a class="kachel" href="/entdecken/sonnensystem.html"><h2>Sonnensystem jetzt</h2><p>Wo stehen die Planeten gerade? Live berechnet, mit Zeitreise vor und zurück.</p><span>Zu den Planeten →</span></a>
+    <a class="kachel" href="/entdecken/mond.html"><h2>Mondphase</h2><p>Wie der Mond heute aussieht und wann der nächste Vollmond kommt.</p><span>Zum Mond →</span></a>
+    <a class="kachel" href="/entdecken/lichtreise.html"><h2>Reise mit Lichtgeschwindigkeit</h2><p>Von der Sonne bis zu Voyager 1 – im echten Maßstab. Spoiler: Der Weltraum ist ziemlich leer.</p><span>Losfliegen →</span></a>
+    <a class="kachel" href="/entdecken/passwort.html"><h2>Passwort-Generator</h2><p>Sichere Passwörter und merkbare Passsätze, erzeugt nur auf deinem Gerät.</p><span>Passwort erzeugen →</span></a>
+    <a class="kachel" href="/entdecken/asteroiden.html"><h2>Asteroidenfeld</h2><p>Ein kleines Spiel für zwischendurch: Weich den Brocken aus und sammle Sterne.</p><span>Spielen →</span></a>
+  </div>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+
+</body>
+</html>

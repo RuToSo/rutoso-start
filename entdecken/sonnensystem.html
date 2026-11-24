@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sonnensystem jetzt · RuToSo</title>
+<meta name="description" content="Wo stehen die Planeten gerade? Live aus den Bahndaten berechnet, mit Zeitreise zwischen 1800 und 2050.">
+<link rel="canonical" href="https://rutoso.de/entdecken/sonnensystem.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuToSo">
+<meta property="og:title" content="Sonnensystem jetzt">
+<meta property="og:description" content="Wo stehen die Planeten gerade? Live aus den Bahndaten berechnet, mit Zeitreise zwischen 1800 und 2050.">
+<meta property="og:url" content="https://rutoso.de/entdecken/sonnensystem.html">
+<meta property="og:image" content="https://rutoso.de/icon-512.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#1C5DA6">
+<style>
+:root{--blau:#1C5DA6;--gelb:#F5C330;--grund:#F3F6F9;--flaeche:#fff;--text:#16222E;--leise:#56677A;--linie:#DCE3EA;color-scheme:light;font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--grund:#0E1822;--flaeche:#16232F;--text:#E8EEF4;--leise:#9AABBD;--linie:#263646;color-scheme:dark}}
+body{margin:0;background:var(--grund);color:var(--text);line-height:1.55}
+header{background:var(--blau);color:#fff;border-bottom:6px solid var(--gelb)}
+.kopf{max-width:52rem;margin:0 auto;padding:2.4rem 1.25rem;display:flex;gap:1.2rem;align-items:center}
+.kopf img{width:4.5rem;height:4.5rem;border-radius:1rem}
+h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem)}
+.kopf p{margin:.3rem 0 0;opacity:.9}
+a.kachel{display:block;background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;color:inherit;text-decoration:none}
+a.kachel:hover,a.kachel:focus-visible{border-color:var(--blau);outline:none}
+a.kachel h2{margin:0 0 .3rem;font-size:1.15rem}
+a.kachel p{margin:0;color:var(--leise)}
+a.kachel span{display:block;margin-top:.7rem;color:var(--blau);font-weight:600}
+footer{max-width:52rem;margin:0 auto;padding:1rem 1.25rem 2rem;color:var(--leise);font-size:.9rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+footer a{color:inherit}
+</style>
+<style>
+.inhalt{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+.inhalt h2{font-size:1.3rem;margin:2rem 0 .6rem}
+.inhalt p{margin:.4rem 0}
+.liste{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));margin-top:1rem}
+.zurueck{display:inline-block;margin-bottom:1rem;color:var(--blau);font-weight:600;text-decoration:none}
+.karte{background:var(--flaeche);border:1px solid var(--linie);border-radius:1rem;padding:1.3rem;margin-top:1rem}
+.knopf{background:var(--blau);color:#fff;border:1px solid var(--blau);border-radius:.6rem;padding:.5rem .95rem;font:inherit;font-weight:600;cursor:pointer}
+.knopf.leise{background:transparent;color:var(--blau);border-color:var(--linie)}
+.knopf:hover,.knopf:focus-visible{outline:2px solid var(--gelb);outline-offset:1px}
+.knopfreihe{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem}
+.hinweis{color:var(--leise);font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--linie)}
+th{color:var(--leise);font-weight:600;font-size:.9rem}
+td.zahl,th.zahl{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){.knopf.leise{color:#8DB8EA}.zurueck,a.kachel span{color:#8DB8EA}}
+</style>
+<style>
+#bahn{display:block;width:100%;height:auto;border-radius:.8rem;background:#08111B}
+.datumwahl{margin-left:auto;color:var(--leise);font-size:.95rem}
+.datumwahl input{font:inherit;padding:.35rem .5rem;border:1px solid var(--linie);border-radius:.5rem;background:var(--grund);color:var(--text)}
+.punkt{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.45rem;vertical-align:-.05rem}
+tr.erde td{font-weight:600}
+@media (max-width:40rem){.datumwahl{margin-left:0;width:100%}th:nth-child(4),td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<header><div class="kopf"><img src="/logo.svg" alt=""><div><h1>Sonnensystem jetzt</h1><p>Die Planeten an ihrer echten Position – live berechnet.</p></div></div></header>
+<div class="inhalt">
+  <a class="zurueck" href="/entdecken/">← Zur Übersicht</a>
+  <p>Wo stehen die acht Planeten in diesem Moment? Die Positionen werden direkt in deinem Browser aus den Bahndaten berechnet. Du kannst auch durch die Zeit springen, zu jedem Datum zwischen 1800 und 2050.</p>
+  <div class="karte">
+    <canvas id="bahn" width="900" height="900" role="img" aria-label="Draufsicht auf das Sonnensystem mit den aktuellen Positionen der Planeten"></canvas>
+    <div class="knopfreihe">
+      <button class="knopf leise" data-schritt="-365">−1 Jahr</button>
+      <button class="knopf leise" data-schritt="-30">−30 Tage</button>
+      <button class="knopf" id="abspielen">▶ Abspielen</button>
+      <button class="knopf leise" data-schritt="30">+30 Tage</button>
+      <button class="knopf leise" data-schritt="365">+1 Jahr</button>
+      <button class="knopf leise" id="jetzt">Jetzt</button>
+      <label class="datumwahl">Datum: <input type="date" id="datum" min="1800-01-01" max="2050-12-31"></label>
+    </div>
+  </div>
+  <div class="karte">
+    <table>
+      <thead><tr><th>Planet</th><th class="zahl">Abstand zur Sonne</th><th class="zahl">Abstand zur Erde</th><th class="zahl">Licht von der Erde</th></tr></thead>
+      <tbody id="tabelle"></tbody>
+    </table>
+  </div>
+  <p class="hinweis">Blick von oben auf die Ebene der Erdbahn; nach rechts zeigt die Richtung des Frühlingspunkts. Damit alle acht Planeten aufs Bild passen, sind die Abstände gestaucht (Wurzelmaßstab), die Richtungen stimmen aber. Grundlage sind die vereinfachten Bahnelemente der NASA/JPL (E. M. Standish), gültig von 1800 bis 2050. Für die Beobachtung reicht das völlig, für die Raumfahrt eher nicht. Angaben ohne Gewähr.</p>
+</div>
+<footer><span>© <span class="jahr">2026</span> RuToSo<span class="stand" data-datum="2026-11-24"> · Stand: 24.11.2026</span></span><a class="mail" data-u="kontakt" data-d="rutoso.de">kontakt [at] rutoso.de</a><a href="https://apps.rutoso.de/impressum.html">Impressum</a><a href="https://apps.rutoso.de/datenschutz.html">Datenschutz</a><a href="https://apps.rutoso.de/nutzungsbedingungen.html">Nutzungsbedingungen</a></footer>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
+<script>document.querySelectorAll('.mail').forEach(function(e){var a=e.dataset.u+'@'+e.dataset.d;e.textContent=a;if(e.tagName==='A')e.href='mailto:'+a})</script>
+<script>(function(){var j=new Date().getFullYear();document.querySelectorAll('.jahr').forEach(function(e){e.textContent=j});document.querySelectorAll('.stand').forEach(function(e){if(Date.now()-new Date(e.dataset.datum)>60*864e5)e.hidden=true})})()</script>
+<script>
+(function(){
+  // a, e, I, L, Länge des Perihels, Länge des aufsteigenden Knotens – und deren Änderung pro Jahrhundert
+  var P=[
+    {n:'Merkur', f:'#B5B0A8', g:3, el:[0.38709927,0.20563593,7.00497902,252.25032350,77.45779628,48.33076593], d:[0.00000037,0.00001906,-0.00594749,149472.67411175,0.16047689,-0.12534081]},
+    {n:'Venus',  f:'#E8C98A', g:4.5, el:[0.72333566,0.00677672,3.39467605,181.97909950,131.60246718,76.67984255], d:[0.00000390,-0.00004107,-0.00078890,58517.81538729,0.00268329,-0.27769418]},
+    {n:'Erde',   f:'#4C9BE8', g:5, el:[1.00000261,0.01671123,-0.00001531,100.46457166,102.93768193,0], d:[0.00000562,-0.00004392,-0.01294668,35999.37244981,0.32327364,0]},
+    {n:'Mars',   f:'#D9663F', g:4, el:[1.52371034,0.09339410,1.84969142,-4.55343205,-23.94362959,49.55953891], d:[0.00001847,0.00007882,-0.00813131,19140.30268499,0.44441088,-0.29257343]},
+    {n:'Jupiter',f:'#D8B48A', g:8, el:[5.20288700,0.04838624,1.30439695,34.39644051,14.72847983,100.47390909], d:[-0.00011607,-0.00013253,-0.00183714,3034.74612775,0.21252668,0.20469106]},
+    {n:'Saturn', f:'#E6D19A', g:7, ring:true, el:[9.53667594,0.05386179,2.48599187,49.95424423,92.59887831,113.66242448], d:[-0.00125060,-0.00050991,0.00193609,1222.49362201,-0.41897216,-0.28867794]},
+    {n:'Uranus', f:'#9FD8E0', g:6, el:[19.18916464,0.04725744,0.77263783,313.23810451,170.95427630,74.01692503], d:[-0.00196176,-0.00004397,-0.00242939,428.48202785,0.40805281,0.04240589]},
+    {n:'Neptun', f:'#5A7FE0', g:6, el:[30.06992276,0.00859048,1.77004347,-55.12002969,44.96476227,131.78422574], d:[0.00026291,0.00005105,0.00035372,218.45945325,-0.32241464,-0.01262724]}
+  ];
+  var RAD=Math.PI/180, AE_KM=149597870.7, AE_LICHTSEK=499.004784;
+  var MIN=Date.UTC(1800,0,1), MAX=Date.UTC(2050,11,31);
+
+  function elemente(p,T){var e=[];for(var i=0;i<6;i++)e[i]=p.el[i]+p.d[i]*T;return e}
+  function lage(e,M){
+    // e = [a, ex, I, L, Perihel, Knoten]; M = mittlere Anomalie in Grad
+    var a=e[0],ex=e[1],I=e[2]*RAD,w=(e[4]-e[5])*RAD,O=e[5]*RAD;
+    M=((M%360)+540)%360-180; var m=M*RAD, E=m+ex*Math.sin(m);
+    for(var k=0;k<8;k++){E-= (E-ex*Math.sin(E)-m)/(1-ex*Math.cos(E))}
+    var x1=a*(Math.cos(E)-ex), y1=a*Math.sqrt(1-ex*ex)*Math.sin(E);
+    var cw=Math.cos(w),sw=Math.sin(w),cO=Math.cos(O),sO=Math.sin(O),cI=Math.cos(I),sI=Math.sin(I);
+    return {
+      x:(cw*cO-sw*sO*cI)*x1+(-sw*cO-cw*sO*cI)*y1,
+      y:(cw*sO+sw*cO*cI)*x1+(-sw*sO+cw*cO*cI)*y1,
+      z:(sw*sI)*x1+(cw*sI)*y1
+    };
+  }
+  function berechne(ms){
+    var T=(ms/864e5+2440587.5-2451545)/36525;
+    return P.map(function(p){var e=elemente(p,T);var M=e[3]-e[4];return {p:p,e:e,pos:lage(e,M)}});
+  }
+
+  var cv=document.getElementById('bahn'), cx=cv.getContext('2d');
+  var S=cv.width, MITTE=S/2, RMAX=S/2-28;
+  function skala(r){return Math.sqrt(r/31)*RMAX}
+  function bild(x,y){var r=Math.hypot(x,y);var s=r?skala(r)/r:0;return [MITTE+x*s, MITTE-y*s]}
+
+  // Sterne für den Hintergrund – fest gewürfelt, damit sie nicht flackern
+  var sterne=[],z=7;function zufall(){z=(z*16807)%2147483647;return z/2147483647}
+  for(var i=0;i<260;i++)sterne.push([zufall()*S,zufall()*S,zufall()*1.2+.2,zufall()*.6+.2]);
+
+  function zeichne(daten){
+    cx.clearRect(0,0,S,S);
+    sterne.forEach(function(s){cx.fillStyle='rgba(255,255,255,'+s[3]+')';cx.beginPath();cx.arc(s[0],s[1],s[2],0,7);cx.fill()});
+    // Bahnen
+    daten.forEach(function(d){
+      cx.beginPath();
+      for(var M=0;M<=360;M+=3){var q=lage(d.e,M);var b=bild(q.x,q.y);M?cx.lineTo(b[0],b[1]):cx.moveTo(b[0],b[1])}
+      cx.strokeStyle=d.p.n==='Erde'?'rgba(76,155,232,.55)':'rgba(255,255,255,.14)';cx.lineWidth=d.p.n==='Erde'?1.6:1;cx.stroke();
+    });
+    // Richtung Frühlingspunkt
+    cx.fillStyle='rgba(255,255,255,.4)';cx.font='15px system-ui,sans-serif';cx.textAlign='right';cx.fillText('Richtung Frühlingspunkt →',S-14,S-16);
+    // Sonne
+    var gl=cx.createRadialGradient(MITTE,MITTE,0,MITTE,MITTE,34);gl.addColorStop(0,'rgba(245,195,48,.9)');gl.addColorStop(1,'rgba(245,195,48,0)');
+    cx.fillStyle=gl;cx.beginPath();cx.arc(MITTE,MITTE,34,0,7);cx.fill();
+    cx.fillStyle='#F5C330';cx.beginPath();cx.arc(MITTE,MITTE,10,0,7);cx.fill();
+    // Planeten
+    cx.textAlign='left';cx.font='600 16px system-ui,sans-serif';var belegt=[];
+    daten.forEach(function(d){
+      var b=bild(d.pos.x,d.pos.y);
+      if(d.p.ring){cx.strokeStyle='rgba(230,209,154,.8)';cx.lineWidth=1.5;cx.beginPath();cx.ellipse(b[0],b[1],d.p.g*2,d.p.g*.8,-.4,0,7);cx.stroke()}
+      cx.fillStyle=d.p.f;cx.beginPath();cx.arc(b[0],b[1],d.p.g,0,7);cx.fill();
+      var w=cx.measureText(d.p.n).width,o=d.p.g+5,versuche=[[o,-o],[o,o+12],[-o-w,-o],[-o-w,o+12],[o,4],[-o-w,4]];
+      for(var v=0;v<versuche.length;v++){
+        var x=b[0]+versuche[v][0],y=b[1]+versuche[v][1],r=[x-2,y-15,x+w+2,y+4];
+        if(x<6||x+w>S-6||y<18||y>S-6)continue;
+        if(!belegt.some(function(q){return r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]}))break;
+      }
+      if(v===versuche.length){x=Math.min(S-6-w,Math.max(6,b[0]+o));y=b[1]-o}
+      belegt.push([x-2,y-15,x+w+2,y+4]);
+      cx.fillStyle='rgba(255,255,255,.9)';cx.fillText(d.p.n,x,y);
+    });
+  }
+
+  function zahl(x,st){return x.toLocaleString('de-DE',{minimumFractionDigits:st,maximumFractionDigits:st})}
+  function dauer(sek){
+    var h=Math.floor(sek/3600),m=Math.round((sek%3600)/60);if(m===60){h++;m=0}
+    return h?h+' h '+m+' min':m+' min';
+  }
+  function tabelle(daten){
+    var erde=daten[2].pos, zeilen='';
+    daten.forEach(function(d){
+      var q=d.pos, rs=Math.hypot(q.x,q.y,q.z), re=Math.hypot(q.x-erde.x,q.y-erde.y,q.z-erde.z);
+      var ist=d.p.n==='Erde';
+      zeilen+='<tr'+(ist?' class="erde"':'')+'><td><span class="punkt" style="background:'+d.p.f+'"></span>'+d.p.n+'</td>'+
+        '<td class="zahl">'+zahl(rs*AE_KM/1e6,1)+' Mio. km</td>'+
+        '<td class="zahl">'+(ist?'–':zahl(re*AE_KM/1e6,1)+' Mio. km')+'</td>'+
+        '<td class="zahl">'+(ist?'–':dauer(re*AE_LICHTSEK))+'</td></tr>';
+    });
+    document.getElementById('tabelle').innerHTML=zeilen;
+  }
+
+  var zeit=Date.now(), live=true, laeuft=false, feld=document.getElementById('datum'), knopf=document.getElementById('abspielen');
+  function iso(ms){return new Date(ms).toISOString().slice(0,10)}
+  function zeige(){zeit=Math.min(MAX,Math.max(MIN,zeit));var d=berechne(zeit);zeichne(d);tabelle(d);feld.value=iso(zeit)}
+
+  document.querySelectorAll('[data-schritt]').forEach(function(b){b.addEventListener('click',function(){live=false;zeit+=b.dataset.schritt*864e5;zeige()})});
+  document.getElementById('jetzt').addEventListener('click',function(){live=true;zeit=Date.now();zeige()});
+  feld.addEventListener('change',function(){if(!feld.value)return;live=false;zeit=Date.parse(feld.value+'T12:00:00Z');zeige()});
+  knopf.addEventListener('click',function(){
+    laeuft=!laeuft;knopf.textContent=laeuft?'❚❚ Anhalten':'▶ Abspielen';
+    if(laeuft){live=false;requestAnimationFrame(schritt)}
+  });
+  function schritt(){if(!laeuft)return;zeit+=2*864e5;if(zeit>=MAX){laeuft=false;knopf.textContent='▶ Abspielen'}zeige();requestAnimationFrame(schritt)}
+  setInterval(function(){if(live&&!laeuft){zeit=Date.now();zeige()}},60000);
+  zeige();
+})();
+</script>
+</body>
+</html>
